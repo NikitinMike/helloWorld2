@@ -63,8 +63,12 @@ struct ContentView: View {
                 Text(pressed).font(.footnote).foregroundColor(Color.red)
 
                 Text("\(timeRemaining)").foregroundColor(.yellow).font(.system(size: 44))
-                    .onReceive(timer) { _ in if timeRemaining > 0 {timeRemaining -= 1 }
-                    else { pressed = Date.now.formatted(date: .omitted, time: .shortened)}
+                    .onReceive(timer) { _ in
+                        if timeRemaining > 0 {timeRemaining -= 1 }
+                        else {
+                            pressed = Date.now.formatted(date: .omitted, time: .shortened)
+                            dots = 0
+                        }
                 }
             }
             .imageScale(.large)
@@ -79,7 +83,7 @@ struct ContentView: View {
     func pressButton(s:String) {
         pressed = "Button \(s) pressed"
         timeRemaining = 9
-        dots += 1
+        if "0123456789".contains(s) { dots += 1 } else { dots = 0 }
     }
 }
 
