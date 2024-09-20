@@ -14,6 +14,7 @@ struct ContentView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 //    @State private var currentDate = Date.now
     @State var timeRemaining = 0
+    @State var dots = 0
 //        .formatted(date: .omitted, time: .shortened)
 
     var body: some View {
@@ -25,9 +26,17 @@ struct ContentView: View {
                 .fontWeight(.medium)
             Text("Йошкар-Ола")
         }
+        .padding()
         .font(.custom("Georgia-Bold", size: 36, relativeTo: .headline))
         .foregroundColor(.blue)
 
+        HStack {
+            Image(systemName: dots % 5 < 1 ? "circle.dotted" : "circle.dotted.circle.fill")
+            Image(systemName: dots % 5 < 2 ? "circle.dotted" : "circle.dotted.circle.fill")
+            Image(systemName: dots % 5 < 3 ? "circle.dotted" : "circle.dotted.circle.fill")
+            Image(systemName: dots % 5 < 4 ? "circle.dotted" : "circle.dotted.circle.fill")
+        }
+        
         if #available(iOS 16.0, *) {
             VStack {
                 HStack {
@@ -50,10 +59,10 @@ struct ContentView: View {
                     Button("", systemImage: "0.circle", action:{pressButton(s:"0")})
                     Button("", systemImage: "arrow.left.circle.dotted", action:{pressButton(s:"back")})
                 }
-                Text(pressed)
-                    .font(.footnote)
-                    .foregroundColor(Color.red)
-                Text("\(timeRemaining)").foregroundColor(.yellow).bold()
+
+                Text(pressed).font(.footnote).foregroundColor(Color.red)
+
+                Text("\(timeRemaining)").foregroundColor(.yellow).font(.system(size: 44))
                     .onReceive(timer) { _ in if timeRemaining > 0 {timeRemaining -= 1 }
                     else { pressed = Date.now.formatted(date: .omitted, time: .shortened)}
                 }
@@ -70,6 +79,7 @@ struct ContentView: View {
     func pressButton(s:String) {
         pressed = "Button \(s) pressed"
         timeRemaining = 9
+        dots += 1
     }
 }
 
